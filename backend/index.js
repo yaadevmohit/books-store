@@ -1,8 +1,15 @@
 import express from "express";
-import { PORT } from "./config.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
-app.listen(PORT, () => {
-    console.log(`App is listening on port: ${PORT}`)
+app.get('/', (req, res) => {
+    console.log(req);
+    return res.status(234).send('Welcome To MERN Stack Tutorial')
+});
+
+app.listen(process.env.PORT, () => {
+    console.log(`App is listening on port: ${process.env.PORT}`)
 })
