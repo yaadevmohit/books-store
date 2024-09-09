@@ -30,7 +30,7 @@ router.post('/', validateInputFields, async (req, res) => {
     try {
         const {title, author, publishYear} = req.body;
         const book = await Book.create({title, author, publishYear});
-        return res.status(201).send(book)
+        return res.status(201).json(book)
     } catch(error) {
         console.log(error.message)
         res.status(500).send({message: error.message})
@@ -42,7 +42,7 @@ router.post('/', validateInputFields, async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const allBooks = await Book.find({});
-        res.status(200).json(allBooks)
+        res.status(200).json({length: allBooks.length, data:allBooks})
     } catch(err) {
         res.status(500).send(err.message)
     }
@@ -59,6 +59,25 @@ router.get('/:id', validateObjectId, async (req, res) => {
 })
 
 // router to update a book
-router.get('/:')
+router.put('/:id', validateInputFields, validateObjectId, async (req, res) => {
+    try{
+        const {id} = req.params;
+        const book = await Book.findByIdAndUpdate(id, req.body)
+        res.status(200).json({message: "Book Updated successfully"})
+    }catch(err){
+        console.log(err.message);
+        res.status(500).send({message: err.message})
+    }
+})
+
+// router to delete a book
+router.delete('/:id', validateObjectId, async (req, res) => {
+    try {
+        await Book.findByIdAndDelete(req.params.id);
+        return res.status(200).send({message: "book deleted successfully"})
+    } catch(err) {
+        return res.status(500).send({message: err.message})
+    }
+})
 
 export default router
