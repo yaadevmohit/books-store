@@ -2,16 +2,32 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import booksRoute from "./routes/bookRoute.js";
+import cors from 'cors';
 
 
 dotenv.config();
 
 const app = express();
 
-// middleware for parsing request body
+// all the middlewares
+//parsing request body
 app.use(express.json());
 
+//cors policy
+app.use(cors());
+
+// app.use(
+//     cors({
+//         origin: "http://localhost:3000",
+//         methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//         allowedHeaders: ['Content-Type']
+//     })
+// );
+
+// routes
 app.use('/books', booksRoute)
+
+
 
 mongoose
 .connect(process.env.DB_URL)
